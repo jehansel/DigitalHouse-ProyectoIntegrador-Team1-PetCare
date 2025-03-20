@@ -1,6 +1,6 @@
 // React
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiDesktop, CiLogout, CiUser } from "react-icons/ci";
 
 // Components
@@ -21,6 +21,7 @@ const Header = () => {
 	const [isLogin, setIsLogin] = useState(true);
 	const [showDropdown, setShowDropdown] = useState(false);
 	const { auth, logout } = useContext(AuthContext);
+	const navigate = useNavigate();
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen);
@@ -39,6 +40,12 @@ const Header = () => {
 		setIsLoginModalOpen(false);
 	};
 
+	const handleAdminPanel = () => {
+		localStorage.removeItem("adminSelectedMenu");
+		navigate("/administracion");
+		setShowDropdown(false);
+	};
+
 	return (
 		<div className="header-container">
 			<div className="fixed-header">
@@ -55,25 +62,15 @@ const Header = () => {
 						>
 							{isMenuOpen ? "✕" : "☰"}
 						</button>
-						<div
-							className={`nav-container ${
-								isMenuOpen ? "show" : ""
-							}`}
-						>
+						<div className={`nav-container ${isMenuOpen ? "show" : ""}`}>
 							{/* <Menu /> */}
 							{!auth.token ? (
 								<>
 									<div className="header-user-noA">
-										<button
-											onClick={() =>
-												openLoginModal(false)
-											}
-										>
+										<button onClick={() => openLoginModal(false)}>
 											Crear cuenta
 										</button>
-										<button
-											onClick={() => openLoginModal(true)}
-										>
+										<button onClick={() => openLoginModal(true)}>
 											Iniciar sesión
 										</button>
 									</div>
@@ -81,7 +78,9 @@ const Header = () => {
 							) : (
 								<div className="header-user">
 									<div className="name-avatar">
-										<h3>{auth.nombre} {auth.apellido}</h3>
+										<h3>
+											{auth.nombre} {auth.apellido}
+										</h3>
 										<div className="avatar-container">
 											<span className="avatar" onClick={toggleDropdown}>
 												{auth.nombre[0]}
@@ -89,17 +88,21 @@ const Header = () => {
 											</span>
 											{showDropdown && (
 												<div className="dropdown-menu">
-													<Link to="/perfil" className="dropdown-item">
+													<Link to="/mi-perfil" className="dropdown-item">
 														<CiUser /> Ver perfil
 													</Link>
 													{auth.role === "ADMIN" && (
-														<Link to="/administracion" className="dropdown-item">
-														<CiDesktop /> Panel administración
-														</Link>
+														<button 
+															onClick={handleAdminPanel}
+															className="dropdown-item"
+														>
+															<CiDesktop /> Panel administración
+														</button>
 													)}
-													
-													
-													<button onClick={logout} className="dropdown-item">
+													<button 
+														onClick={logout} 
+														className="dropdown-item"
+													>
 														<CiLogout /> Cerrar Sesión
 													</button>
 												</div>

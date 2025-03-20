@@ -33,31 +33,53 @@ const AdminCategory = ({ isInAdminLayout }) => {
 		};
 	};
 
-	const handleAddCategory = async (categoryData) => {
+	const handleAddCategory = async (formData) => {
 		const headers = getAuthHeaders();
 		if (!headers) {
 			logout();
 			return;
-		}
+		}z
 
 		try {
-			await axios.post(
-				API_URL,
-				categoryData,
-				headers
-			);
+			// For FormData, we need to modify headers to handle multipart data
+			// but remove Content-Type so boundary is set automatically
+			const multipartHeaders = {
+				...headers.headers,
+			};
+
+			console.log("Sending category creation request with FormData");
+
+			// Display FormData entries for debugging
+			for (let pair of formData.entries()) {
+				console.log(pair[0], pair[1]);
+			}
+
+			const response = await axios.post(API_URL, formData, {
+				headers: multipartHeaders,
+			});
+
+			console.log("Category created successfully:", response.data);
 			setShowAddForm(false);
 			alert("Categoría creada exitosamente");
-			// Usar la función global de actualización
+
+			// Reload category list
 			if (window.refreshCategoryList) {
 				window.refreshCategoryList();
 			} else {
-				// Si la función no está disponible, recargar la página
 				window.location.reload();
 			}
 		} catch (error) {
 			console.error("Error creating category:", error);
-			setError("Error al crear la categoría: " + error.message);
+			if (error.response) {
+				console.error("Response data:", error.response.data);
+				setError(
+					`Error al crear la categoría: ${
+						error.response.data.mensaje || error.message
+					}`
+				);
+			} else {
+				setError("Error al crear la categoría: " + error.message);
+			}
 		}
 	};
 
@@ -68,10 +90,33 @@ const AdminCategory = ({ isInAdminLayout }) => {
 			return;
 		}
 
+		// Check if ID is present in the data
+		const categoryId = categoryData.idCategoria;
+		if (!categoryId) {
+			console.error("Missing category ID:", categoryData);
+			setError("Error: ID de categoría faltante");
+			return;
+		}
+
 		try {
+			console.log("Sending update request:", {
+				url: `${API_URL}/${categoryId}`,
+				data: {
+					nombre: categoryData.nombre,
+					descripcion: categoryData.descripcion,
+					imagenUrl: categoryData.imagenUrl, // Include the imagenUrl in the update
+				},
+				headers: headers.headers,
+			});
+
+			// Regular JSON data with imagenUrl included
 			await axios.put(
-				`${API_URL}/${categoryData.idCategoria}`,
-				{ nombre: categoryData.nombre },
+				`${API_URL}/${categoryId}`,
+				{
+					nombre: categoryData.nombre,
+					descripcion: categoryData.descripcion,
+					imagenUrl: categoryData.imagenUrl, // Include the imagenUrl in the request
+				},
 				headers
 			);
 
@@ -89,7 +134,17 @@ const AdminCategory = ({ isInAdminLayout }) => {
 			alert("Categoría actualizada exitosamente");
 		} catch (error) {
 			console.error("Error updating category:", error);
-			setError("Error al actualizar la categoría: " + error.message);
+			if (error.response) {
+				console.error("Response status:", error.response.status);
+				console.error("Response data:", error.response.data);
+				setError(
+					`Error al actualizar la categoría: ${
+						error.response.data.mensaje || error.message
+					}`
+				);
+			} else {
+				setError("Error al actualizar la categoría: " + error.message);
+			}
 		}
 	};
 

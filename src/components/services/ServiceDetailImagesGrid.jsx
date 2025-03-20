@@ -1,18 +1,10 @@
-// React
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-
-// Pages
-
-// Components
-
-// Styles
-import "../../styles/services/serviceImagesMain.css";
-
-// Images
+import "../../styles/services/serviceDetailImagesGrid.css";
 import arrowLeft from "../../images/arrow-left.png";
 
-const ServiceImagesMain = ({ images, onGoBack }) => {
+const ServiceDetailImagesGrid = ({ images, onGoBack }) => {
 	const navigate = useNavigate();
 
 	const handleViewMore = () => {
@@ -37,24 +29,28 @@ const ServiceImagesMain = ({ images, onGoBack }) => {
 					padding: "10px 20px",
 				}}
 			>
-				<button onClick={handleBackClick} className="back-button">
-					<img src={arrowLeft} alt="Go back" />
-				</button>
+				<img
+					src={arrowLeft}
+					alt="Volver"
+					style={{
+						width: "30px",
+						height: "30px",
+						cursor: "pointer",
+					}}
+					onClick={handleBackClick}
+				/>
 			</div>
 			<div className="images-grid-container">
 				{/* Main image */}
 				<div className="main-image">
-					<img src={images[0]?.imagenUrl || '/images/default-placeholder.jpg'} alt="Main service view" />
+					<img src={images[0]} alt="Main service view" />
 				</div>
 
 				{/* Grid of 4 smaller images */}
 				<div className="secondary-images">
 					{images.slice(1, 5).map((image, index) => (
 						<div key={index} className="grid-image">
-							<img
-								src={image?.imagenUrl || '/images/default-placeholder.jpg'}
-								alt={`Service view ${index + 2}`}
-							/>
+							<img src={image.imagenUrl} alt={`Service view ${index + 2}`} />
 						</div>
 					))}
 				</div>
@@ -69,9 +65,9 @@ const ServiceImagesMain = ({ images, onGoBack }) => {
 	);
 };
 
-ServiceImagesMain.propTypes = {
+ServiceDetailImagesGrid.propTypes = {
 	images: PropTypes.arrayOf(PropTypes.string).isRequired,
 	onGoBack: PropTypes.func,
 };
 
-export default ServiceImagesMain;
+export default ServiceDetailImagesGrid;

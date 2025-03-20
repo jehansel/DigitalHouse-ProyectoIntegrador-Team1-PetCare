@@ -30,7 +30,10 @@ const ServiceGallery = () => {
 				<div className="gallery-grid">
 					{images.map((image, index) => (
 						<div key={index} className="gallery-item">
-							<img src={image} alt={`Pet ${index + 1}`} />
+							<img 
+								src={image?.imagenUrl || "/images/default-placeholder.jpg"} 
+								alt={`Pet ${index + 1}`} 
+							/>
 						</div>
 					))}
 				</div>
