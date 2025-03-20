@@ -1,7 +1,7 @@
 import "react";
 import { StarsComponent } from "../shared/StarsComponent";
 import {
-  CardContainer,zz
+  CardContainer,
   ImageContainer,
   Image,
   InfoContainer,
