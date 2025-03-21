@@ -28,7 +28,7 @@ export const ServiceCard = ({
         <Image alt={name} src={image?.imagenUrl || "https://images-s3-test.s3.us-east-1.amazonaws.com/Home-Pics/pets.jpg"}/>
       </ImageContainer>
       <InfoContainer>
-        <h3 className="serviceType">{serviceType?.name}</h3>
+        <h3 className="serviceType">{serviceType?.nombre}</h3>
         <NameContainer>
           <p>{name}</p>
           <StarsComponent rating={rating} key={name} />
