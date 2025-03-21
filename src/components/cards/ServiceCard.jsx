@@ -25,12 +25,12 @@ export const ServiceCard = ({
   return (
     <CardContainer>
       <ImageContainer onClick={() => onImageClick()}>
-        <Image alt={name} src={image?.imagenUrl}/>
+        <Image alt={name} src={image?.imagenUrl || "https://images-s3-test.s3.us-east-1.amazonaws.com/Home-Pics/pets.jpg"}/>
       </ImageContainer>
       <InfoContainer>
         <h3 className="serviceType">{serviceType?.name}</h3>
         <NameContainer>
-          <p>{name} {id}</p>
+          <p>{name}</p>
           <StarsComponent rating={rating} key={name} />
         </NameContainer>
         <ExcerptContainer>
