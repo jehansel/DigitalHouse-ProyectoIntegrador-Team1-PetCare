@@ -11,15 +11,15 @@ const EditUserRoleForm = ({ user, onClose, onSubmit }) => {
     role: "",
   });
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        idUser: user.id,
-        nombre: user.nombre,
-        role: user.rol,
-      });
-    }
-  }, [user]);
+	useEffect(() => {
+		if (user) {
+			setFormData({
+				idUser: user.id,
+				nombre: user.nombre,
+				role: user.rol,
+			});
+		}
+	}, [user]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -28,14 +28,14 @@ const EditUserRoleForm = ({ user, onClose, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.idUser) {
-      console.error("ID de usuario no disponible");
-      return;
-    }
-    onSubmit(formData);
-  };
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (!formData.idUser) {
+			console.error("ID de usuario no disponible");
+			return;
+		}
+		onSubmit(formData);
+	};
 
   return (
     <div className="form-overlay">
@@ -78,14 +78,16 @@ const EditUserRoleForm = ({ user, onClose, onSubmit }) => {
     </div>
   );
 };
+
 EditUserRoleForm.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nombre: PropTypes.string.isRequired,
-    rol: PropTypes.string.isRequired,
-  }),
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+	user: PropTypes.shape({
+		id: PropTypes.number.isRequired,
+		nombre: PropTypes.string.isRequired,
+		rol: PropTypes.string.isRequired,
+	}),
+	onClose: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
 };
+
 
 export default EditUserRoleForm;
