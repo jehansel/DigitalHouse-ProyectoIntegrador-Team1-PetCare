@@ -158,7 +158,7 @@ const AdminCategoryList = ({ onEdit }) => {
           </thead>
           <tbody>
             {categories.map((category) => (
-              <tr key={category.id_categoria} className="table-row">
+              <tr key={category.id} className="table-row">
                 <td className="table-cell">
                   {category.imagenUrl ? (
                     <img
@@ -171,16 +171,18 @@ const AdminCategoryList = ({ onEdit }) => {
                         borderRadius: "4px",
                       }}
                       onError={(e) => {
-                        console.error(
-                          "Failed to load image:",
-                          category.imagenUrl
+                        console.log(
+                          "Error loading image for category:",
+                          category.nombre
                         );
                         e.target.onerror = null;
                         e.target.src = "https://images-s3-test.s3.us-east-1.amazonaws.com/logo/002bd4cd-4d9d-4507-b37a-8ac22622a83b_pet-care-logo-v2.png";
                       }}
                     />
                   ) : (
+                    // Si no hay imagenUrl, muestra el div gris
                     <div
+                      key={`placeholder-${category.id}`}
                       style={{
                         width: "20px",
                         height: "20px",
@@ -188,7 +190,7 @@ const AdminCategoryList = ({ onEdit }) => {
                         borderRadius: "4px",
                         display: "inline-block",
                       }}
-                    ></div>
+                    />
                   )}
                 </td>
                 <td className="table-cell">{category.nombre}</td>

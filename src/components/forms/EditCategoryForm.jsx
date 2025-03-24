@@ -3,28 +3,34 @@ import PropTypes from "prop-types";
 import "../../styles/forms/formStyles.css";
 
 const EditCategoryForm = ({ category, onClose, onSubmit }) => {
+  console.log("Initial category data:", category); // Debug log
+
   const [formData, setFormData] = useState({
-    id_categoria: "",
-    nombre: "",
-    descripcion: "",
-    imagenUrl: "", // Added imagenUrl to the form data
+    id_categoria: category.id || category.id_categoria, // Intentar ambos formatos de ID
+    nombre: category.nombre || "",
+    descripcion: category.descripcion || "",
+    imagenUrl: category.imagenUrl || "",
   });
 
   useEffect(() => {
-    if (category) {
-      setFormData({
-        id_categoria: category.id_categoria || "",
-        nombre: category.nombre || "",
-        descripcion: category.descripcion || "",
-        imagenUrl: category.imagenUrl || "", // Preserve the imagenUrl
-      });
-    }
+    console.log("Category received:", category);
+    console.log("Category ID formats:", {
+      id: category.id,
+      id_categoria: category.id_categoria,
+    });
   }, [category]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting with ID:", formData.id_categoria);
-    onSubmit(formData);
+    console.log("Form data before submit:", formData);
+
+    const dataToSubmit = {
+      ...formData,
+      id_categoria: category.id || category.id_categoria, // Intentar ambos formatos de ID
+    };
+
+    console.log("Final data to submit:", dataToSubmit);
+    onSubmit(dataToSubmit);
   };
 
   // Specific debug for imagenUrl field
