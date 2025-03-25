@@ -11,7 +11,7 @@ import pencilIcon from "../../images/pencil.png"; // For edit button
 import trashIcon from "../../images/trash-can.png"; // For delete button
 
 const BASE_URL = import.meta.env.VITE_API_URL || "";
-const API_URL = `${BASE_URL}/api/categorias/categoria-list`;
+const API_URL = `${BASE_URL}/api/categorias`;
 
 const AdminCategoryList = ({ onEdit }) => {
   const [categories, setCategories] = useState([]);
@@ -28,7 +28,7 @@ const AdminCategoryList = ({ onEdit }) => {
     }
 
     try {
-      const response = await axios.get(API_URL, {
+      const response = await axios.get(`${API_URL}/categoria-list`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -84,7 +84,7 @@ const AdminCategoryList = ({ onEdit }) => {
     try {
       console.log("Deleting category:", categoryToDelete); // Debug log
       const response = await axios.delete(
-        `${API_URL}/${categoryToDelete.id_categoria}`, // Changed from .id to .id_categoria
+        `${API_URL}/${categoryToDelete.id}`, // Changed from .id to .id_categoria
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -111,6 +111,9 @@ const AdminCategoryList = ({ onEdit }) => {
           )
         ); // Changed from .id to .id_categoria
         setError(null);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000)
       }
     } catch (err) {
       console.error("Delete error:", err); // Debug log
