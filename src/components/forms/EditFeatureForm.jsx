@@ -16,15 +16,18 @@ import {
 import petCareLogo from "../../images/pet-care-logo-v2.png";
 
 const EditFeatureForm = ({ feature, onClose, onSubmit }) => {
+  console.log("Feature recibida en el formulario:", feature);
+
   const [formData, setFormData] = useState({
-    id_caracteristica: feature.id_caracteristica,
+    idCaracteristica: feature.idCaracteristica,
     nombre: feature.nombre || "",
     descripcion: feature.descripcion || "",
-    icono: feature.icono || "",
+    icon: feature.icon || "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Datos a enviar:", formData);
     onSubmit(formData);
   };
 
@@ -72,11 +75,11 @@ const EditFeatureForm = ({ feature, onClose, onSubmit }) => {
             <Label>Ícono:</Label>
             <Input
               type="text"
-              value={formData.icono}
+              value={formData.icon}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  icono: e.target.value,
+                  icon: e.target.value,
                 })
               }
               placeholder="URL o clase del ícono"
@@ -99,10 +102,10 @@ const EditFeatureForm = ({ feature, onClose, onSubmit }) => {
 
 EditFeatureForm.propTypes = {
   feature: PropTypes.shape({
-    id_caracteristica: PropTypes.number.isRequired,
+    idCaracteristica: PropTypes.number.isRequired,
     nombre: PropTypes.string.isRequired,
     descripcion: PropTypes.string,
-    icono: PropTypes.string,
+    icon: PropTypes.string,
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

@@ -90,9 +90,15 @@ const AdminFeature = ({ isInAdminLayout }) => {
   };
 
   const handleEditFeature = async (formData) => {
+    console.log("Datos recibidos para actualizar:", formData); // Debug
     try {
+      if (!formData.idCaracteristica) {
+        toast.error("ID de característica no válido");
+        return;
+      }
+
       await axios.put(
-        `${BASE_URL}/api/caracteristicas/${formData.id_caracteristica}`,
+        `${BASE_URL}/api/caracteristicas/${formData.idCaracteristica}`,
         formData,
         {
           headers: {
@@ -105,6 +111,7 @@ const AdminFeature = ({ isInAdminLayout }) => {
       setShowEditForm(false);
       fetchCharacteristics();
     } catch (error) {
+      console.error("Error completo:", error.response || error); // Debug mejorado
       toast.error("Error al actualizar la característica");
     }
   };
@@ -176,35 +183,38 @@ const AdminFeature = ({ isInAdminLayout }) => {
                 </tr>
               </thead>
               <tbody>
-                {characteristics.map((characteristic) => (
-                  <tr key={characteristic.id}>
-                    <td>{characteristic.nombre}</td>
-                    <td>
-                      {characteristic.icon ? (
-                        <img src={characteristic.icon} height={30} />
-                      ) : (
-                        "Sin icono"
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="icon-button"
-                        onClick={() => {
-                          setSelectedFeature(characteristic);
-                          setShowEditForm(true);
-                        }}
-                      >
-                        <img src={pencilIcon} alt="Editar característica" />
-                      </button>
-                      <button
-                        className="icon-button"
-                        onClick={() => handleDelete(characteristic.id)}
-                      >
-                        <img src={trashIcon} alt="Eliminar característica" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {characteristics.map((characteristic) => {
+                  console.log("Característica en el mapeo:", characteristic); // Debug
+                  return (
+                    <tr key={characteristic.idCaracteristica}>
+                      <td>{characteristic.nombre}</td>
+                      <td>
+                        {characteristic.icon ? (
+                          <img src={characteristic.icon} height={30} />
+                        ) : (
+                          "Sin icono"
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className="icon-button"
+                          onClick={() => {
+                            setSelectedFeature(characteristic);
+                            setShowEditForm(true);
+                          }}
+                        >
+                          <img src={pencilIcon} alt="Editar característica" />
+                        </button>
+                        <button
+                          className="icon-button"
+                          onClick={() => handleDelete(characteristic.idCaracteristica)}
+                        >
+                          <img src={trashIcon} alt="Eliminar característica" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
